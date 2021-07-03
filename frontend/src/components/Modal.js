@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   Button,
   Modal,
@@ -11,24 +11,43 @@ import {
   Label
 } from 'reactstrap';
 
-const CustomModal = (props) => {
-  const [activeItem, setActiveItem] = useState(props.activeItem)
-  const {toggle, onSave} = props
+import { useDispatch, useSelector } from 'react-redux'
+import { createTodoItem, editTodoItem } from '../reducers/todoListReducer'
+import { setModal } from '../reducers/modalReducer'
+import { setActiveItem } from '../reducers/activeItemReducer'
+
+
+
+const CustomModal = () => {
+  const activeItem = useSelector(state => state.activeItem)
+  const currentModalStatus = useSelector(state => state.modal)
+
+  const dispatch = useDispatch() 
+
+  const toggle = () => dispatch(setModal(!currentModalStatus))
 
   const handleChange = (event) => {
     let {name, value} = event.target
     if(event.target.type === 'checkbox')
       value = event.target.checked
     const newActiveItem = {...activeItem, [name]:value}
-    setActiveItem(newActiveItem)
+    dispatch(setActiveItem(newActiveItem))
   }
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    onSave(activeItem)
-  }
-
-  
+    toggle()
+    if(!activeItem.id){
+      if(window.confirm("do you want to add new item?")){
+        dispatch(createTodoItem(activeItem))
+      }
+    } 
+    else {
+      if(window.confirm("save changes?")){
+        dispatch(editTodoItem(activeItem))
+      }
+    }
+  }  
 
   return (
     <Modal isOpen={true} toggle={toggle}>
@@ -82,4 +101,4 @@ const CustomModal = (props) => {
   )
 }
 
-export default CustomModal;
+export default CustomModal

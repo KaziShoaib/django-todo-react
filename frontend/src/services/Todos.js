@@ -2,24 +2,24 @@ import axios from 'axios'
 
 let baseURL = '/api/todos/'
 
-const getAll = () => {
-  let request = axios.get(baseURL)
-  return request.then(response => response.data)
+const getAll = async () => {
+  let response = await axios.get(baseURL)
+  return response.data
 }
 
-const createItem = (newObject) => {
-  let request = axios.post(baseURL, newObject)
-  return request.then(response => response.data)
+const createItem = async (newObject) => {
+  let response = await axios.post(baseURL, newObject)
+  return response.data
 }
 
-const removeItem = (id) => {
-  let request = axios.delete(`${baseURL}${id}/`)
-  return request.then(response => response.data)
+const removeItem = async (id) => {
+  let response = await axios.delete(`${baseURL}${id}/`)
+  return response.data
 }
 
-const editItem = (id, newObjedt) => {
-  let request = axios.put(`${baseURL}${id}/`, newObjedt)
-  return request.then(response => response.data)
+const editItem = async (id, newObjedt) => {
+  let response = await axios.put(`${baseURL}${id}/`, newObjedt)
+  return response.data
 }
 
 export default {getAll, createItem, removeItem, editItem}
